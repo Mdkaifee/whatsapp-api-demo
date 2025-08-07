@@ -1,29 +1,30 @@
-require('dotenv').config();
 const axios = require('axios');
 
-const token = process.env.ACCESS_TOKEN;
-const phoneNumberId = process.env.PHONE_NUMBER_ID;
-const recipient = process.env.RECIPIENT_PHONE;
-
-const url = `https://graph.facebook.com/v21.0/${phoneNumberId}/messages`;
-
-const data = {
+// Set your token and other parameters here
+const token = 'EAARrpXwpJJcBPOaXaZB7HDtX8shvAKKGPE8TSYEhMAmqETyq0v31lhaNgw2ajmpZBwoAiZA2JoNmKNFPcty43Q8uVNzdtarweCgZBijjFNfQ3XHwkyagZCxJBhaljeOpk9W1n5mCjZASTXfdOm0PjKUb3tt6paPX0KKBRFVTDUsR2VKCQ0WeJZBji9OkmITnnopE1MthbRVn0VO6REbdZCwo1XN81mqqyRkDTL2HawRUKKMfuaEZD';
+const phoneNumber = '916201273115';  // Recipient's phone number
+const messageData = {
   messaging_product: 'whatsapp',
-  to: recipient,
-  type: 'text',
-  text: { body: 'Hello! 🎉 This is a test WhatsApp message using Meta API.' },
+  to: phoneNumber,
+  type: 'template',
+  template: {
+    name: 'hello_world',
+    language: {
+      code: 'en_US'
+    }
+  }
 };
 
-axios
-  .post(url, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
+// API request to send message
+axios.post('https://graph.facebook.com/v22.0/767523369771903/messages', messageData, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => {
+    console.log('Message sent successfully:', response.data);
   })
-  .then((res) => {
-    console.log('✅ Message sent:', res.data);
-  })
-  .catch((err) => {
-    console.error('❌ Error:', err.response ? err.response.data : err.message);
+  .catch(error => {
+    console.error('Error sending message:', error);
   });
